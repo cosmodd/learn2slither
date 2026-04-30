@@ -104,6 +104,10 @@ class Game:
         if next_head_position[1] < 0 or next_head_position[1] >= height:
             return False
 
+        # Check if the snake is going to collide with itself
+        if next_head_position in self.snake:
+            return False
+
         self.snake.insert(0, next_head_position)
         self.snake.pop()
 
