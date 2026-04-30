@@ -121,4 +121,4 @@ class Game:
         else:
             self.snake = self.snake[:-1]
 
-        return True
+        return len(self.snake) > 0
