@@ -25,7 +25,14 @@ class Game:
         self.green_apples = []
         self.red_apples = []
 
-        self._init_snake(snake_length)
+        snake_initialized = False
+        while not snake_initialized:
+            try:
+                self._init_snake(snake_length)
+                snake_initialized = True
+            except:
+                pass
+
         self.spawn_green_apples(green_apple_count)
         self.spawn_red_apples(red_apple_count)
 
