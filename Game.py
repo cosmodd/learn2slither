@@ -98,6 +98,7 @@ class Game:
         (width, height) = self.size
         next_head_position = _add_vec(self.snake[0], direction.value)
 
+        # Check if the snake is going out of bounds
         if next_head_position[0] < 0 or next_head_position[0] >= width:
             return False
 
