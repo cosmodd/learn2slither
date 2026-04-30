@@ -27,7 +27,7 @@ class Game:
 
         self._init_snake(snake_length)
         self.spawn_green_apples(green_apple_count)
-        self._init_red_apples()
+        self.spawn_red_apples(red_apple_count)
 
     def _in_bounds(self, position):
         (width, height) = self.size
@@ -79,5 +79,10 @@ class Game:
             available_cells.remove(available_cells[index])
 
 
-    def _init_red_apples(self):
-        pass
+    def spawn_red_apples(self, count: int = 1):
+        available_cells = self._get_available_cells()
+
+        for _ in range(count):
+            index = random.randint(0, len(available_cells) - 1)
+            self.red_apples.append(available_cells[index])
+            available_cells.remove(available_cells[index])
