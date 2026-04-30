@@ -93,3 +93,18 @@ class Game:
             index = random.randint(0, len(available_cells) - 1)
             self.red_apples.append(available_cells[index])
             available_cells.remove(available_cells[index])
+
+    def move(self, direction: Directions):
+        (width, height) = self.size
+        next_head_position = _add_vec(self.snake[0], direction.value)
+
+        if next_head_position[0] < 0 or next_head_position[0] >= width:
+            return False
+
+        if next_head_position[1] < 0 or next_head_position[1] >= height:
+            return False
+
+        self.snake.insert(0, next_head_position)
+        self.snake.pop()
+
+        return True

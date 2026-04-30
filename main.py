@@ -52,6 +52,16 @@ def main():
                 if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
                     running = False
 
+                if event.key == pygame.K_w or event.key == pygame.K_UP:
+                    game.move(Directions.UP)
+                elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                    game.move(Directions.DOWN)
+                elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                    game.move(Directions.RIGHT)
+                elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                    game.move(Directions.LEFT)
+
+
         screen.fill((214, 30, 73))
 
         # Draw grid
