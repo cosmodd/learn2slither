@@ -108,7 +108,16 @@ class Game:
         if next_head_position in self.snake:
             return False
 
+        # Handle growth of the snake
         self.snake.insert(0, next_head_position)
-        self.snake.pop()
+        if next_head_position in self.green_apples:
+            self.green_apples.remove(next_head_position)
+            self.spawn_green_apples()
+        elif next_head_position in self.red_apples:
+            self.red_apples.remove(next_head_position)
+            self.snake = self.snake[:-2]
+            self.spawn_red_apples()
+        else:
+            self.snake = self.snake[:-1]
 
         return True
