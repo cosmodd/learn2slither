@@ -25,8 +25,8 @@ class Game:
         self.green_apples = []
         self.red_apples = []
 
-        self._init_green_apples()
         self._init_snake(snake_length)
+        self.spawn_green_apples(green_apple_count)
         self._init_red_apples()
 
     def _in_bounds(self, position):
@@ -38,6 +38,19 @@ class Game:
         return position in self.snake \
             or position in self.green_apples \
             or position in self.red_apples
+
+    def _get_available_cells(self):
+        (width, height) = self.size
+        available_cells = []
+
+        for y in range(height):
+            for x in range(width):
+                position = (x, y)
+                if position in self.snake or position in self.green_apples or position in self.red_apples:
+                    continue
+                available_cells.append(position)
+
+        return available_cells
 
     def _init_snake(self, length: int):
         (width, height) = self.size
@@ -57,8 +70,14 @@ class Game:
             valid_directions = [*filter(lambda d: not self._is_space_occupied(d) and self._in_bounds(d), directions)]
             self.snake.append(random.choice(valid_directions))
 
-    def _init_green_apples(self):
-        pass
+    def spawn_green_apples(self, count: int = 1):
+        available_cells = self._get_available_cells()
+
+        for _ in range(count):
+            index = random.randint(0, len(available_cells) - 1)
+            self.green_apples.append(available_cells[index])
+            available_cells.remove(available_cells[index])
+
 
     def _init_red_apples(self):
         pass
