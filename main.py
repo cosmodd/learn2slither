@@ -34,6 +34,7 @@ def main():
 
     # Setup pygame
     pygame.init()
+    pygame.key.set_repeat(100, 100)
     screen = pygame.display.set_mode((800, 800))
     clock = pygame.time.Clock()
     running = True
