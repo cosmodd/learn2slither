@@ -1,2 +1,6 @@
-.idea
+# Python
 .venv
+__pycache__
+
+# Others
+.idea
