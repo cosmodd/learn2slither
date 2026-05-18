@@ -47,7 +47,7 @@ class Game:
     def _in_bounds(self, position):
         (width, height) = self.size
         (x, y) = position
-        return x > 0 and x < width and y > 0 and y < height
+        return 0 <= x < width and 0 <= y < height
 
     def _is_space_occupied(self, position):
         return position in self.snake \
