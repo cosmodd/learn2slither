@@ -5,6 +5,7 @@ from enum import Enum, auto
 def _add_vec(a: tuple[int, int], b: tuple[int, int]) -> tuple[int, int]:
     return a[0] + b[0], a[1] + b[1]
 
+
 class Directions(Enum):
     UP = (0, -1)
     DOWN = (0, 1)
@@ -18,7 +19,14 @@ class GameStates(Enum):
 
 
 class Game:
-    def __init__(self, width=10, height=10, snake_length=3, green_apple_count=2, red_apple_count=1):
+    def __init__(
+        self,
+        width= 10,
+        height= 10,
+        snake_length= 3,
+        green_apple_count= 2,
+        red_apple_count= 1,
+    ):
         self.state = GameStates.PLAYING
         self.size = (width, height)
         self.snake = []
@@ -84,7 +92,6 @@ class Game:
             index = random.randint(0, len(available_cells) - 1)
             self.green_apples.append(available_cells[index])
             available_cells.remove(available_cells[index])
-
 
     def spawn_red_apples(self, count: int = 1):
         available_cells = self._get_available_cells()
