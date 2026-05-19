@@ -129,3 +129,48 @@ class Game:
             self.snake = self.snake[:-1]
 
         return len(self.snake) > 0
+
+    def _get_cell_character(self, position):
+        if not self._in_bounds(position):
+            return "W"
+
+        if position == self.snake[0]:
+            return "H"
+        elif position in self.snake:
+            return "S"
+
+        if position in self.green_apples:
+            return "G"
+
+        if position in self.red_apples:
+            return "R"
+
+        return "0"
+
+    def get_snake_vision(self):
+        (width, height) = self.size
+        (x, y) = self.snake[0]
+
+        vision = ["", "", "", ""]
+
+        # Handle UP vision
+        for i in reversed(range(y)):
+            vision[0] += self._get_cell_character((x, i))
+        vision[0] += "W"
+
+        # Handle RIGHT vision
+        for i in range(x + 1, width):
+            vision[1] += self._get_cell_character((i, y))
+        vision[1] += "W"
+
+        # Handle DOWN vision
+        for i in range(y + 1, height):
+            vision[2] += self._get_cell_character((x, i))
+        vision[2] += "W"
+
+        # Handle RIGHT vision
+        for i in reversed(range(x)):
+            vision[3] += self._get_cell_character((i, y))
+        vision[3] += "W"
+
+        return vision
