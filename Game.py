@@ -173,4 +173,4 @@ class Game:
             vision[3] += self._get_cell_character((i, y))
         vision[3] += "W"
 
-        return vision
+        return tuple(vision)
