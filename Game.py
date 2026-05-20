@@ -30,6 +30,7 @@ class Game:
         self.state = GameStates.PLAYING
         self.size = (width, height)
         self.snake = []
+        self.last_direction = None
         self.green_apples = []
         self.red_apples = []
 
@@ -74,16 +75,19 @@ class Game:
             random.randint(0, height - 1),
         )]
 
-        for _ in range(length - 1):
+        for index in range(length - 1):
             tail = self.snake[-1]
             directions = [
-                _add_vec(tail, Directions.UP.value),
-                _add_vec(tail, Directions.RIGHT.value),
-                _add_vec(tail, Directions.DOWN.value),
-                _add_vec(tail, Directions.LEFT.value),
+                (Directions.UP, _add_vec(tail, Directions.UP.value)),
+                (Directions.RIGHT, _add_vec(tail, Directions.RIGHT.value)),
+                (Directions.DOWN, _add_vec(tail, Directions.DOWN.value)),
+                (Directions.LEFT, _add_vec(tail, Directions.LEFT.value)),
             ]
-            valid_directions = [*filter(lambda d: not self._is_space_occupied(d) and self._in_bounds(d), directions)]
-            self.snake.append(random.choice(valid_directions))
+            valid_directions = [*filter(lambda d: not self._is_space_occupied(d[1]) and self._in_bounds(d[1]), directions)]
+            random_direction = random.choice(valid_directions)
+            if index == 0:
+                self.last_direction = random_direction[0]
+            self.snake.append(random_direction[1])
 
     def spawn_green_apples(self, count: int = 1):
         available_cells = self._get_available_cells()
@@ -101,22 +105,13 @@ class Game:
             self.red_apples.append(available_cells[index])
             available_cells.remove(available_cells[index])
 
-    def move(self, direction: Directions):
-        (width, height) = self.size
-        next_head_position = _add_vec(self.snake[0], direction.value)
-
-        # Check if the snake is going out of bounds
-        if next_head_position[0] < 0 or next_head_position[0] >= width:
+    def _handle_snake_next_position(self, next_head_position):
+        if not self._in_bounds(next_head_position):
             return False
 
-        if next_head_position[1] < 0 or next_head_position[1] >= height:
-            return False
-
-        # Check if the snake is going to collide with itself
         if next_head_position in self.snake:
             return False
 
-        # Handle growth of the snake
         self.snake.insert(0, next_head_position)
         if next_head_position in self.green_apples:
             self.green_apples.remove(next_head_position)
@@ -129,6 +124,15 @@ class Game:
             self.snake = self.snake[:-1]
 
         return len(self.snake) > 0
+
+    def move(self, direction: Directions):
+        next_head_position = _add_vec(self.snake[0], direction.value)
+        successful = self._handle_snake_next_position(next_head_position)
+
+        if successful:
+            self.last_direction = direction
+
+        return successful
 
     def _get_cell_character(self, position):
         if not self._in_bounds(position):
