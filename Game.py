@@ -12,11 +12,14 @@ class Directions(Enum):
     LEFT = (-1, 0)
     RIGHT = (1, 0)
 
+class RelativeDirections(Enum):
+    LEFT = auto()
+    STRAIGHT = auto()
+    RIGHT = auto()
 
 class GameStates(Enum):
     PLAYING = auto()
     GAME_OVER = auto()
-
 
 class Game:
     def __init__(
@@ -128,6 +131,36 @@ class Game:
     def move(self, direction: Directions):
         next_head_position = _add_vec(self.snake[0], direction.value)
         successful = self._handle_snake_next_position(next_head_position)
+
+        if successful:
+            self.last_direction = direction
+
+        return successful
+
+    def relative_move(self, relative_direction: RelativeDirections):
+        left_mapping = {
+            Directions.UP: Directions.LEFT,
+            Directions.RIGHT: Directions.UP,
+            Directions.DOWN: Directions.RIGHT,
+            Directions.LEFT: Directions.DOWN,
+        }
+
+        right_mapping = {
+            Directions.UP: Directions.RIGHT,
+            Directions.RIGHT: Directions.DOWN,
+            Directions.DOWN: Directions.LEFT,
+            Directions.LEFT: Directions.UP,
+        }
+
+        direction = self.last_direction
+
+        if relative_direction == RelativeDirections.LEFT:
+            direction = left_mapping[self.last_direction]
+
+        if relative_direction == RelativeDirections.RIGHT:
+            direction = right_mapping[self.last_direction]
+
+        successful = self._handle_snake_next_position(_add_vec(self.snake[0], direction.value))
 
         if successful:
             self.last_direction = direction
