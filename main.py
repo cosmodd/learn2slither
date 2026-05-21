@@ -1,6 +1,7 @@
 import pygame
 
-from Game import Game, Directions
+from Game import Game, Directions, GameStates, MoveOutcome
+
 
 def print_game(game: Game):
     (width, height) = game.size
@@ -77,7 +78,7 @@ def main():
 
     (width, height) = game.size
 
-    while running:
+    while running and game.state == GameStates.PLAYING:
 
         # Handle keystrokes and some events
         for event in pygame.event.get():
@@ -88,14 +89,19 @@ def main():
                 if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
                     running = False
 
+                move_outcome = None
                 if event.key == pygame.K_w or event.key == pygame.K_UP:
-                    game.move(Directions.UP)
+                    move_outcome = game.move(Directions.UP)
                 elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                    game.move(Directions.DOWN)
+                    move_outcome = game.move(Directions.DOWN)
                 elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    game.move(Directions.RIGHT)
+                    move_outcome = game.move(Directions.RIGHT)
                 elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    game.move(Directions.LEFT)
+                    move_outcome = game.move(Directions.LEFT)
+
+                if move_outcome == MoveOutcome.DIED:
+                    print("YOU DIED.............")
+                    game.state = GameStates.GAME_OVER
 
         draw_game(game, screen)
         pygame.display.flip()
