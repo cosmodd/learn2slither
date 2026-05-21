@@ -17,7 +17,7 @@ def main():
 
     for episode in range(number_of_games):
         game = Game()
-        state = game.get_snake_vision()
+        state = agent.get_state(game.get_snake_vision())
         episode_reward = 0
 
         print("Starting new game, starting states:")
@@ -35,7 +35,7 @@ def main():
                 game.state = GameStates.GAME_OVER
                 break
 
-            next_state = game.get_snake_vision()
+            next_state = agent.get_state(game.get_snake_vision())
             agent.update_q(state, action, reward, next_state)
             state = next_state
 

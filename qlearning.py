@@ -24,6 +24,9 @@ class QLearningAgent:
 
         self.actions = list(RelativeDirections)
 
+    def get_state(self, vision):
+        return vision
+
     def choose_action(self, state, training=True):
         if training and random.random() < self.epsilon:
             return random.choice(self.actions)
