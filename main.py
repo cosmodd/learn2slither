@@ -29,6 +29,42 @@ def print_game(game: Game):
             print(char, end='')
         print()
 
+def draw_game(game: Game, screen: pygame.Surface):
+    (width, height) = game.size
+    cell_size = pygame.display.get_surface().get_size()[0] / width
+
+    screen.fill((214, 30, 73))
+
+    # Draw grid
+    for y in range(height):
+        for x in range(width):
+            screen_position = (x * cell_size, y * cell_size)
+            pygame.draw.rect(screen, (163, 16, 51), (screen_position, (cell_size, cell_size)), 1)
+
+    snake_head_color = (65, 68, 250)
+    snake_body_colors = [
+        (40, 42, 173),
+        (28, 29, 120),
+    ]
+    snake_body_color_count = len(snake_body_colors)
+    for i, (x, y) in enumerate(game.snake):
+        screen_position = (x * cell_size, y * cell_size)
+        rect = (screen_position, (cell_size, cell_size))
+        if i == 0:
+            pygame.draw.rect(screen, snake_head_color, rect)
+        else:
+            pygame.draw.rect(screen, snake_body_colors[i % snake_body_color_count], rect)
+
+    for (x, y) in game.green_apples:
+        screen_position = (x * cell_size, y * cell_size)
+        rect = (screen_position, (cell_size, cell_size))
+        pygame.draw.rect(screen, (68, 250, 65), rect)
+
+    for (x, y) in game.red_apples:
+        screen_position = (x * cell_size, y * cell_size)
+        rect = (screen_position, (cell_size, cell_size))
+        pygame.draw.rect(screen, (250, 65, 65), rect)
+
 def main():
     game = Game()
 
@@ -40,7 +76,6 @@ def main():
     running = True
 
     (width, height) = game.size
-    cell_size = pygame.display.get_surface().get_size()[0] / width
 
     while running:
 
@@ -62,38 +97,7 @@ def main():
                 elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
                     game.move(Directions.LEFT)
 
-
-        screen.fill((214, 30, 73))
-
-        # Draw grid
-        for y in range(height):
-            for x in range(width):
-                screen_position = (x * cell_size, y * cell_size)
-                pygame.draw.rect(screen, (163, 16, 51), (screen_position, (cell_size, cell_size)), 1)
-
-        snake_colors = [
-            (65, 68, 250),
-            (40, 42, 173),
-            (28, 29, 120),
-        ]
-        for i, (x, y) in enumerate(game.snake):
-            screen_position = (x * cell_size, y * cell_size)
-            rect = (screen_position, (cell_size, cell_size))
-            if i == 0:
-                pygame.draw.rect(screen, snake_colors[0], rect)
-            else:
-                pygame.draw.rect(screen, snake_colors[1 + i % 2], rect)
-
-        for (x, y) in game.green_apples:
-            screen_position = (x * cell_size, y * cell_size)
-            rect = (screen_position, (cell_size, cell_size))
-            pygame.draw.rect(screen, (68, 250, 65), rect)
-
-        for (x, y) in game.red_apples:
-            screen_position = (x * cell_size, y * cell_size)
-            rect = (screen_position, (cell_size, cell_size))
-            pygame.draw.rect(screen, (250, 65, 65), rect)
-
+        draw_game(game, screen)
         pygame.display.flip()
         clock.tick(60)
 
