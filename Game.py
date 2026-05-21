@@ -21,6 +21,12 @@ class GameStates(Enum):
     PLAYING = auto()
     GAME_OVER = auto()
 
+class MoveOutcome(Enum):
+    GREW = auto()
+    SHRUNK = auto()
+    MOVED = auto()
+    DIED = auto()
+
 class Game:
     def __init__(
         self,
@@ -108,34 +114,39 @@ class Game:
             self.red_apples.append(available_cells[index])
             available_cells.remove(available_cells[index])
 
-    def _handle_snake_next_position(self, next_head_position):
+    def _handle_snake_next_position(self, next_head_position) -> MoveOutcome:
         if not self._in_bounds(next_head_position):
-            return False
+            return MoveOutcome.DIED
 
-        if next_head_position in self.snake:
-            return False
+        if next_head_position in self.snake and next_head_position != self.snake[-1]:
+            return MoveOutcome.DIED
 
         self.snake.insert(0, next_head_position)
         if next_head_position in self.green_apples:
             self.green_apples.remove(next_head_position)
             self.spawn_green_apples()
-        elif next_head_position in self.red_apples:
+            return MoveOutcome.GREW
+
+        if next_head_position in self.red_apples:
             self.red_apples.remove(next_head_position)
             self.snake = self.snake[:-2]
             self.spawn_red_apples()
-        else:
-            self.snake = self.snake[:-1]
+            if len(self.snake) > 0:
+                return MoveOutcome.SHRUNK
+            else:
+                return MoveOutcome.DIED
 
-        return len(self.snake) > 0
+        self.snake = self.snake[:-1]
+        return MoveOutcome.MOVED
 
-    def move(self, direction: Directions):
+    def move(self, direction: Directions) -> MoveOutcome:
         next_head_position = _add_vec(self.snake[0], direction.value)
-        successful = self._handle_snake_next_position(next_head_position)
+        outcome = self._handle_snake_next_position(next_head_position)
 
-        if successful:
+        if outcome != MoveOutcome.DIED:
             self.last_direction = direction
 
-        return successful
+        return outcome
 
     def relative_move(self, relative_direction: RelativeDirections):
         left_mapping = {
@@ -160,12 +171,12 @@ class Game:
         if relative_direction == RelativeDirections.RIGHT:
             direction = right_mapping[self.last_direction]
 
-        successful = self._handle_snake_next_position(_add_vec(self.snake[0], direction.value))
+        outcome = self._handle_snake_next_position(_add_vec(self.snake[0], direction.value))
 
-        if successful:
+        if outcome != MoveOutcome.DIED:
             self.last_direction = direction
 
-        return successful
+        return outcome
 
     def _get_cell_character(self, position):
         if not self._in_bounds(position):
