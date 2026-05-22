@@ -1,3 +1,5 @@
+from argparse import ArgumentParser
+
 from Game import Game, MoveOutcome, GameStates
 from qlearning import QLearningAgent
 
@@ -12,10 +14,23 @@ def get_reward(outcome: MoveOutcome) -> float:
     return reward_map[outcome]
 
 def main():
-    number_of_games = 100
-    agent = QLearningAgent()
+    parser = ArgumentParser(
+        prog=__file__,
+        description="Train a Q-Learning agent on a Snake",
+    )
 
-    for episode in range(number_of_games):
+    parser.add_argument("--episodes", type=int, default=100, help="Number of episodes to play")
+
+    arguments = parser.parse_args()
+
+    agent = QLearningAgent(
+        learning_rate=0.1,
+        discount_factor=0.99,
+        epsilon=1.0,
+        epsilon_decay_factor=0.995,
+    )
+
+    for episode in range(arguments.episodes):
         game = Game()
         state = agent.get_state(game.get_snake_vision())
         episode_reward = 0
