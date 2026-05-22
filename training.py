@@ -32,7 +32,7 @@ def main():
 
     for episode in range(arguments.episodes):
         game = Game()
-        state = agent.get_state(game.get_snake_vision())
+        state = agent.get_state(game)
         episode_reward = 0
         max_snake_length = len(game.snake)
         steps = 0
@@ -54,7 +54,7 @@ def main():
                 break
 
             max_snake_length = max(max_snake_length, len(game.snake))
-            next_state = agent.get_state(game.get_snake_vision())
+            next_state = agent.get_state(game)
             agent.update_q(state, action, reward, next_state)
             state = next_state
             steps += 1

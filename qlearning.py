@@ -24,8 +24,22 @@ class QLearningAgent:
 
         self.actions = list(RelativeDirections)
 
-    def get_state(self, vision):
-        return vision
+    def get_state(self, game: Game):
+        def get_char_distance(dir, char):
+            for i, c in enumerate(dir):
+                if c == char:
+                    return i + 1
+            return 0
+
+        def encode_direction(direction):
+            return (
+                get_char_distance(direction, "G"),
+                get_char_distance(direction, "R"),
+                get_char_distance(direction, "S"),
+                get_char_distance(direction, "W"),
+            )
+
+        return game.last_direction, tuple(encode_direction(d) for d in game.get_snake_vision())
 
     def choose_action(self, state, training=True):
         if training and random.random() < self.epsilon:
