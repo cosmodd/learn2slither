@@ -19,8 +19,7 @@ def main():
         description="Train a Q-Learning agent on a Snake",
     )
 
-    parser.add_argument("--episodes", type=int, default=100, help="Number of episodes to play")
-
+    parser.add_argument("--episodes", "-e", type=int, default=100, help="Number of episodes to play")
     arguments = parser.parse_args()
 
     agent = QLearningAgent(
