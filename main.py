@@ -76,8 +76,6 @@ def main():
     clock = pygame.time.Clock()
     running = True
 
-    (width, height) = game.size
-
     while running and game.state == GameStates.PLAYING:
 
         # Handle keystrokes and some events
