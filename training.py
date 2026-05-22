@@ -35,6 +35,7 @@ def main():
         state = agent.get_state(game.get_snake_vision())
         episode_reward = 0
         max_snake_length = len(game.snake)
+        steps = 0
 
         print("Starting new game, starting states:")
         print(f"STATE: {state} | SNAKE_DIR: {game.last_direction}")
@@ -56,9 +57,10 @@ def main():
             next_state = agent.get_state(game.get_snake_vision())
             agent.update_q(state, action, reward, next_state)
             state = next_state
+            steps += 1
 
         agent.decay_epsilon()
-        print(f"Episode: {episode + 1} | Reward: {episode_reward} | Epsilon: {agent.epsilon} | Max Snake Length: {max_snake_length}")
+        print(f"Episode: {episode + 1} | Reward: {episode_reward} | Epsilon: {agent.epsilon} | Max Snake Length: {max_snake_length} | Steps: {steps}")
 
 if __name__ == "__main__":
     main()
