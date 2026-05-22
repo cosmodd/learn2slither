@@ -72,9 +72,22 @@ class QLearningAgent:
         q_table = {state: dict(actions) for state, actions in self.q_table.items()}
 
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        pickle.dump(q_table, open(filepath, "wb"))
+        pickle.dump({
+            "learning_rate": self.learning_rate,
+            "discount_factor": self.discount_factor,
+            "epsilon": self.epsilon,
+            "q_table": q_table
+        }, open(filepath, "wb"))
 
-    def load_model(self, filepath: str):
-        q_table = pickle.load(open(filepath, "rb"))
-        self.q_table = defaultdict(lambda: defaultdict(float), {state: defaultdict(float, actions) for state, actions in q_table.items()})
+    @staticmethod
+    def load_model(filepath: str):
+        model = pickle.load(open(filepath, "rb"))
+        agent = QLearningAgent()
+
+        agent.learning_rate = model["learning_rate"]
+        agent.discount_factor = model["discount_factor"]
+        agent.epsilon = model["epsilon"]
+        agent.q_table = defaultdict(lambda: defaultdict(float), {state: defaultdict(float, actions) for state, actions in model["q_table"].items()})
+
+        return agent
 
