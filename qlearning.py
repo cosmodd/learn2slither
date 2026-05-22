@@ -38,7 +38,10 @@ class QLearningAgent:
         Q learning update: Q(state, action) += learning_rate * (reward + discount_factor * Q(next_state, a) - Q(state, action))
         """
         current_q = self.q_table[state][action]
-        max_next_q = max(self.q_table[next_state].values()) if self.q_table[next_state] else 0
+        if next_state is None:
+            max_next_q = 0
+        else:
+            max_next_q = max(self.q_table[next_state].values()) if self.q_table[next_state] else 0
 
         new_q = current_q + self.learning_rate * (reward + self.discount_factor * max_next_q - current_q)
         self.q_table[state][action] = new_q

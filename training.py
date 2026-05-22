@@ -32,6 +32,7 @@ def main():
             print(f"STATE: {state} | ACT: {action} | SNAKE_DIR: {game.last_direction} | OUTCOME: {outcome} | REWARD: {reward} | EP_REWARD: {episode_reward}")
 
             if outcome == MoveOutcome.DIED:
+                agent.update_q(state, action, reward, None)
                 game.state = GameStates.GAME_OVER
                 break
 
