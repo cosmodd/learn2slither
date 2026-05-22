@@ -64,6 +64,7 @@ class QLearningAgent:
 
     def decay_epsilon(self):
         self.epsilon *= self.epsilon_decay_factor
+        self.epsilon = max(1 / 100, self.epsilon)
 
     def save_model(self, filepath: str):
         q_table = {state: dict(actions) for state, actions in self.q_table.items()}
