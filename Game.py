@@ -216,7 +216,7 @@ class Game:
             vision[2] += self._get_cell_character((x, i))
         vision[2] += "W"
 
-        # Handle RIGHT vision
+        # Handle LEFT vision
         for i in reversed(range(x)):
             vision[3] += self._get_cell_character((i, y))
         vision[3] += "W"
