@@ -1,3 +1,4 @@
+import os
 from argparse import ArgumentParser
 
 from Game import Game, MoveOutcome, GameStates
@@ -27,7 +28,7 @@ def main():
         learning_rate=0.1,
         discount_factor=0.99,
         epsilon=1.0,
-        epsilon_decay_factor=0.995,
+        epsilon_decay_factor=(0.01 ** (1 / arguments.episodes)),
     )
 
     for episode in range(arguments.episodes):
@@ -59,7 +60,7 @@ def main():
             state = next_state
             steps += 1
 
-        agent.decay_epsilon()
+        agent.decay_epsilon(episode)
         print(f"Episode: {episode + 1} | Reward: {episode_reward} | Epsilon: {agent.epsilon} | Max Snake Length: {max_snake_length} | Steps: {steps}")
 
     if arguments.save:

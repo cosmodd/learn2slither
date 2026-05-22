@@ -62,9 +62,11 @@ class QLearningAgent:
         new_q = current_q + self.learning_rate * (reward + self.discount_factor * max_next_q - current_q)
         self.q_table[state][action] = new_q
 
-    def decay_epsilon(self):
-        self.epsilon *= self.epsilon_decay_factor
-        self.epsilon = max(1 / 100, self.epsilon)
+    def decay_epsilon(self, episode: int = None):
+        if episode is None:
+            self.epsilon = max(0.01, self.epsilon * self.epsilon_decay_factor)
+        else:
+            self.epsilon = max(0.01, 1.0 * (self.epsilon_decay_factor ** episode))
 
     def save_model(self, filepath: str):
         q_table = {state: dict(actions) for state, actions in self.q_table.items()}
