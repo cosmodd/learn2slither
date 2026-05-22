@@ -20,6 +20,7 @@ def main():
     )
 
     parser.add_argument("--episodes", "-e", type=int, default=100, help="Number of episodes to play")
+    parser.add_argument("--save", "-s", action='store_true', help="Save the trained model")
     arguments = parser.parse_args()
 
     agent = QLearningAgent(
@@ -60,6 +61,10 @@ def main():
 
         agent.decay_epsilon()
         print(f"Episode: {episode + 1} | Reward: {episode_reward} | Epsilon: {agent.epsilon} | Max Snake Length: {max_snake_length} | Steps: {steps}")
+
+    if arguments.save:
+        filepath = os.path.join("models", f"{arguments.episodes}_episodes.model")
+        agent.save_model(filepath)
 
 if __name__ == "__main__":
     main()
