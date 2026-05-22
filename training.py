@@ -6,9 +6,9 @@ from qlearning import QLearningAgent
 def get_reward(outcome: MoveOutcome) -> float:
     reward_map = {
         MoveOutcome.DIED: -10,
-        MoveOutcome.SHRUNK: -1,
+        MoveOutcome.SHRUNK: -5,
         MoveOutcome.MOVED: -0.1,
-        MoveOutcome.GREW: 1,
+        MoveOutcome.GREW: 10,
     }
 
     return reward_map[outcome]
