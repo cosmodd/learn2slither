@@ -229,3 +229,23 @@ class Game:
         vision[3] += "W"
 
         return tuple(vision)
+
+    def get_relative_snake_vision(self):
+        absolute_vision = self.get_snake_vision()
+        relative_snake_vision = []
+
+        dir_to_index = {
+            Directions.UP: 0,
+            Directions.RIGHT: 1,
+            Directions.DOWN: 2,
+            Directions.LEFT: 3,
+        }
+
+        last_direction_index = dir_to_index[self.last_direction]
+        left_index = (last_direction_index + 4 - 1) % 4
+        right_index = (last_direction_index + 4 + 1) % 4
+
+        relative_snake_vision.append(absolute_vision[left_index])
+        relative_snake_vision.append(absolute_vision[last_direction_index])
+        relative_snake_vision.append(absolute_vision[right_index])
+        return relative_snake_vision
