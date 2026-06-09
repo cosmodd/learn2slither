@@ -84,6 +84,13 @@ class Game:
             random.randint(0, height - 1),
         )]
 
+        opposites = {
+            Directions.UP: Directions.DOWN,
+            Directions.DOWN: Directions.UP,
+            Directions.LEFT: Directions.RIGHT,
+            Directions.RIGHT: Directions.LEFT,
+        }
+
         for index in range(length - 1):
             tail = self.snake[-1]
             directions = [
@@ -95,7 +102,7 @@ class Game:
             valid_directions = [*filter(lambda d: not self._is_space_occupied(d[1]) and self._in_bounds(d[1]), directions)]
             random_direction = random.choice(valid_directions)
             if index == 0:
-                self.last_direction = random_direction[0]
+                self.last_direction = opposites[random_direction[0]]
             self.snake.append(random_direction[1])
 
     def spawn_green_apples(self, count: int = 1):
