@@ -13,6 +13,7 @@ def main():
     )
 
     parser.add_argument("model_path", type=str, help="Path to the model")
+    parser.add_argument("--speed", "-s", help="How fast is the game", type=int, default=10)
     arguments = parser.parse_args()
 
     # Setup pygame
@@ -52,7 +53,7 @@ def main():
             renderer.render(game)
             pygame.display.flip()
 
-        clock.tick(10)
+        clock.tick(arguments.speed)
 
 
 if __name__ == "__main__":
