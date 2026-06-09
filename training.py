@@ -28,7 +28,7 @@ def main():
         learning_rate=0.1,
         discount_factor=0.99,
         epsilon=1.0,
-        epsilon_decay_factor=(0.01 ** (1 / arguments.episodes)),
+        epsilon_decay_factor=(0.02 ** (1 / arguments.episodes)),
     )
 
     for episode in range(arguments.episodes):
