@@ -38,16 +38,12 @@ def main():
         max_snake_length = len(game.snake)
         steps = 0
 
-        print("Starting new game, starting states:")
-        print(f"STATE: {state} | SNAKE_DIR: {game.last_direction}")
-
         while game.state == GameStates.PLAYING:
             action = agent.choose_action(state, training=True)
             outcome = game.relative_move(action)
 
             reward = get_reward(outcome)
             episode_reward += reward
-            print(f"STATE: {state} | ACT: {action} | SNAKE_DIR: {game.last_direction} | OUTCOME: {outcome} | REWARD: {reward} | EP_REWARD: {episode_reward}")
 
             if outcome == MoveOutcome.DIED:
                 agent.update_q(state, action, reward, None)
