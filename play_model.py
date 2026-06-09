@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 import pygame
 
 from Game import Game, MoveOutcome, GameStates
-from main import draw_game
+from Renderer import Renderer
 from qlearning import QLearningAgent
 
 def main():
@@ -15,15 +15,16 @@ def main():
     parser.add_argument("model_path", type=str, help="Path to the model")
     arguments = parser.parse_args()
 
-    agent = QLearningAgent.load_model(arguments.model_path)
-    game = Game()
-
     # Setup pygame
     pygame.init()
-    screen = pygame.display.set_mode((800, 800))
     clock = pygame.time.Clock()
     running = True
-    draw_game(game, screen)
+
+    agent = QLearningAgent.load_model(arguments.model_path)
+    game = Game()
+    renderer = Renderer(game)
+
+    renderer.render(game)
     pygame.display.flip()
 
     while running:
@@ -41,7 +42,6 @@ def main():
         if game.state == GameStates.PLAYING:
             state = agent.get_state(game)
             action = agent.choose_action(state, training=False)
-            print(f"Action: {action}")
             outcome = game.relative_move(action)
 
             if outcome == MoveOutcome.DIED:
@@ -49,7 +49,7 @@ def main():
                 print(f"Game over!")
                 continue
 
-            draw_game(game, screen)
+            renderer.render(game)
             pygame.display.flip()
 
         clock.tick(10)
