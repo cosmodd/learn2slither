@@ -42,7 +42,7 @@ class QLearningAgent:
 
         return tuple(encode_direction(d) for d in game.get_relative_snake_vision())
 
-    def choose_action(self, state, training=True):
+    def choose_action(self, state, training=False):
         if training and random.random() < self.epsilon:
             return random.choice(self.actions)
         else:
